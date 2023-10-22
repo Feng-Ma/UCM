@@ -39,8 +39,10 @@ def is_bot(line: str) -> bool:
     >>> is_bot('213.180.203.109 - - [15/Sep/2023:00:12:18 +0200] "GET /robots.txt HTTP/1.1" 302 567 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)"')
     True
     """
-    datere = re.compile(r'\.*(bot)\.*')
-    result = datere.search(line)
+    # datere = re.compile(r'\.*(bot)\.*')
+    botre = re.compile(r'\s(\w)+(bot)/\.*')
+    log = line.lower()
+    result = botre.search(log)
     if result:
         return True
     else:
@@ -87,13 +89,12 @@ def histbyhour(filename: str) -> dict[int, int]:
     """
     result = {}
     with open(filename) as f:
-        access = f.readlines()
-    for line in access:
-        hour = int(get_hour(line))
-        if hour in result.keys():
-            result[hour] += 1
-        else:
-            result[hour] = 1
+        for line in f:
+            hour = int(get_hour(line))
+            if hour in result.keys():
+                result[hour] += 1
+            else:
+                result[hour] = 1
     return result
 
 
@@ -103,10 +104,9 @@ def ipaddreses(filename: str) -> set[str]:
     """
     result = set()
     with open(filename) as f:
-        access = f.readlines()
-    for line in access:
-        if not is_bot(line):
-            result.add(get_ipaddr(line))
+        for line in f:
+            if not is_bot(line):
+                result.add(get_ipaddr(line))
 
     return result
 
@@ -119,7 +119,7 @@ def test_doc():
 
 
 def test_ipaddresses():
-    assert ipaddreses('access_short.log') == {'34.105.93.183', '39.103.168.88'}
+    assert ipaddreses('access_short.log') == {'34.105.93.183', '39.103.168.88', '66.249.66.135'}
 
 
 def test_hist():
@@ -127,7 +127,11 @@ def test_hist():
     assert hist == {5: 3, 7: 2, 23: 1}
 
 
-if __name__ == '__main__':
+def main() -> None:
     test_doc()
     test_ipaddresses()
     test_hist()
+
+
+if __name__ == '__main__':
+    main()
