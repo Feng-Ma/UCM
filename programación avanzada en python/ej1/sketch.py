@@ -41,7 +41,8 @@ def is_bot(line: str) -> bool:
     """
     # datere = re.compile(r'\.*(bot)\.*')
     botre = re.compile(r'\s(\w)+(bot)/\.*')
-    log = line.lower()
+    # log = line.lower()
+    log = get_user_agent(line).lower()
     result = botre.search(log)
     if result:
         return True
