@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geom2d"
+version = "0.0.1"
+requires-python = ">=3.11"
+readme = "README.md"
+license = {file = 'gpl-3.0.txt'}
+authors = [
+	{name = 'Feng Ma', email = 'fengma@ucm.es'}
+]
+
+[tool.setuptools.packages.find]
+exclude = ["tests*"]
